@@ -1,8 +1,34 @@
 package ma.mundiapolis.springmvc.repository;
 
 import ma.mundiapolis.springmvc.entities.Product;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 
-public interface ProductRepository extends JpaRepository <Product , Long> {
+import static org.assertj.core.api.Assertions.assertThat;
 
+@DataJpaTest
+class ProductRepositoryTest {
+
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Test
+    void shouldSaveAndFindProduct() {
+        Product saved = productRepository.save(
+                Product.builder().name("Clavier").price(300).quantity(5).build());
+
+        assertThat(saved.getId()).isNotNull();
+        assertThat(productRepository.findById(saved.getId())).isPresent();
+    }
+
+    @Test
+    void shouldDeleteProduct() {
+        Product saved = productRepository.save(
+                Product.builder().name("Souris").price(100).quantity(8).build());
+
+        productRepository.deleteById(saved.getId());
+
+        assertThat(productRepository.findById(saved.getId())).isEmpty();
+    }
 }
