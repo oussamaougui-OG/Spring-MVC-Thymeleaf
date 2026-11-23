@@ -8,13 +8,23 @@
     <div class="card">
         <div class="card-header">Liste des produits</div>
         <div class="card-body">
+
+            <!-- Recherche -->
+            <form th:action="@{/index}" method="get" class="row g-2 mb-3">
+                <div class="col-auto">
+                    <input type="text" name="keyword" th:value="${keyword}"
+                           class="form-control" placeholder="Rechercher par nom">
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-primary">Rechercher</button>
+                    <a th:href="@{/index}" class="btn btn-outline-secondary">Réinitialiser</a>
+                </div>
+            </form>
+
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Nom</th>
-                    <th>Prix</th>
-                    <th>Quantité</th>
+                    <th>ID</th><th>Nom</th><th>Prix</th><th>Quantité</th>
                     <th sec:authorize="hasRole('ADMIN')"></th>
                 </tr>
                 </thead>
@@ -25,15 +35,35 @@
                     <td th:text="${p.price}"></td>
                     <td th:text="${p.quantity}"></td>
                     <td sec:authorize="hasRole('ADMIN')">
-                        <form th:action="@{/delete}" method="post"
-                              onsubmit="return confirm('Supprimer ce produit ?')">
-                            <input type="hidden" name="id" th:value="${p.id}">
-                            <button class="btn btn-danger btn-sm">Supprimer</button>
-                        </form>
+                        <div class="d-flex gap-2">
+                            <a class="btn btn-warning btn-sm"
+                               th:href="@{/editProduct(id=${p.id})}">Modifier</a>
+                            <form th:action="@{/delete}" method="post" class="m-0"
+                                  onsubmit="return confirm('Supprimer ce produit ?')">
+                                <input type="hidden" name="id" th:value="${p.id}">
+                                <input type="hidden" name="keyword" th:value="${keyword}">
+                                <input type="hidden" name="page" th:value="${currentPage}">
+                                <button class="btn btn-danger btn-sm">Supprimer</button>
+                            </form>
+                        </div>
                     </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(productList)}">
+                    <td colspan="5" class="text-center text-muted">Aucun produit trouvé</td>
                 </tr>
                 </tbody>
             </table>
+
+            <!-- Pagination -->
+            <nav th:if="${pages.length > 1}">
+                <ul class="pagination">
+                    <li th:each="i : ${#numbers.sequence(0, pages.length - 1)}"
+                        class="page-item" th:classappend="${i == currentPage} ? 'active'">
+                        <a class="page-link" th:text="${i + 1}"
+                           th:href="@{/index(page=${i}, keyword=${keyword})}"></a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
 </div>

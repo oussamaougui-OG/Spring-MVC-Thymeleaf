@@ -46,7 +46,7 @@ public class SecurityConfig {
                         .permitAll())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/h2-console/**").permitAll()
-                        .requestMatchers("/formProducts/**", "/save/**", "/delete/**").hasRole("ADMIN")
+                        .requestMatchers("/formProducts/**", "/editProduct/**", "/save/**", "/delete/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .exceptionHandling(ex -> ex.accessDeniedPage("/notAuthorized"))
                 // nécessaire pour la console H2
