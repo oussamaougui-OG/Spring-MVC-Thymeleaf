@@ -48,4 +48,13 @@ public class ProductController {
         productRepository.save(product);
         return "redirect:/index";
     }
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
+    @GetMapping("/notAuthorized")
+    public String notAuthorized() {
+        return "notAuthorized";
+    }
 }

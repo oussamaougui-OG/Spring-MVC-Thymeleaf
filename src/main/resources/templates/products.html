@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layout}">
 <body>
 <div layout:fragment="content">
@@ -9,7 +10,13 @@
         <div class="card-body">
             <table class="table table-striped">
                 <thead>
-                <tr><th>ID</th><th>Nom</th><th>Prix</th><th>Quantité</th><th></th></tr>
+                <tr>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Prix</th>
+                    <th>Quantité</th>
+                    <th sec:authorize="hasRole('ADMIN')"></th>
+                </tr>
                 </thead>
                 <tbody>
                 <tr th:each="p : ${productList}">
@@ -17,7 +24,7 @@
                     <td th:text="${p.name}"></td>
                     <td th:text="${p.price}"></td>
                     <td th:text="${p.quantity}"></td>
-                    <td>
+                    <td sec:authorize="hasRole('ADMIN')">
                         <form th:action="@{/delete}" method="post"
                               onsubmit="return confirm('Supprimer ce produit ?')">
                             <input type="hidden" name="id" th:value="${p.id}">

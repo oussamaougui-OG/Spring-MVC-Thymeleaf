@@ -9,12 +9,7 @@ import org.springframework.boot.security.autoconfigure.SecurityAutoConfiguration
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
-@SpringBootApplication(excludeName = {
-        "org.springframework.boot.security.autoconfigure.SecurityAutoConfiguration",
-        "org.springframework.boot.security.autoconfigure.UserDetailsServiceAutoConfiguration",
-        "org.springframework.boot.security.autoconfigure.web.servlet.ServletWebSecurityAutoConfiguration",
-        "org.springframework.boot.security.autoconfigure.web.servlet.SecurityFilterAutoConfiguration"
-})
+@SpringBootApplication
 public class SpringMvcApplication {
 
     public static void main(String[] args) {
