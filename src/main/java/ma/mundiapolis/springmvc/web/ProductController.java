@@ -1,0 +1,51 @@
+package ma.mundiapolis.springmvc.web;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import ma.mundiapolis.springmvc.entities.Product;
+import ma.mundiapolis.springmvc.repository.ProductRepository;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+@Controller
+@RequiredArgsConstructor
+public class ProductController {
+
+    private final ProductRepository productRepository;
+
+    @GetMapping("/")
+    public String home() {
+        return "redirect:/index";
+    }
+
+    @GetMapping("/index")
+    public String index(Model model) {
+        model.addAttribute("productList", productRepository.findAll());
+        return "products";
+    }
+
+    @PostMapping("/delete")
+    public String delete(@RequestParam Long id) {
+        productRepository.deleteById(id);
+        return "redirect:/index";
+    }
+
+    @GetMapping("/formProducts")
+    public String formProducts(Model model) {
+        model.addAttribute("product", new Product());
+        return "formProducts";
+    }
+
+    @PostMapping("/save")
+    public String save(@Valid Product product, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "formProducts";
+        }
+        productRepository.save(product);
+        return "redirect:/index";
+    }
+}
